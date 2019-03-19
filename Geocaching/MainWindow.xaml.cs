@@ -103,7 +103,7 @@ namespace Geocaching
             // Handle map click here.
             UpdateMap();
         }
-
+#warning MakeAsync
         private void OnAddGeocacheClick(object sender, RoutedEventArgs args)
         {
             var dialog = new GeocacheDialog();
@@ -145,6 +145,7 @@ namespace Geocaching
             };
         }
 
+#warning MakeAsync
         private void OnAddPersonClick(object sender, RoutedEventArgs args)
         {
             var dialog = new PersonDialog();
