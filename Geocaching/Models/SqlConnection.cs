@@ -8,6 +8,6 @@ namespace Geocaching.Models
 {
     public static class SqlConnection
     {
-        public static readonly string ConnectionString = @"Data Source=DESKTOP-NJ8Q870\SQLEXPRESS;Initial Catalog=GeoCatch;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"; 
+        public static readonly string ConnectionString = @"Data Source=DESKTOP-VGVVK7K\SQLEXPRESS;Initial Catalog=Geocach;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"; 
     }
 }

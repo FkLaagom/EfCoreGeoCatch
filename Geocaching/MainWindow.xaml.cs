@@ -150,7 +150,8 @@ namespace Geocaching
             };
             var t = AddPersonAsync(person);
 
-            var pin = AddPin(latestClickLocation, person.FirstName, Colors.Blue);
+            string pinInfo = person.FirstName + " " + person.LastName + "\n " + person.StreetName + " " + person.StreetNumber;
+            var pin = AddPin(latestClickLocation, pinInfo, Colors.Blue);
 
             pin.MouseDown += (s, a) =>
             {
