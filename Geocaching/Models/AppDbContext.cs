@@ -12,8 +12,9 @@ namespace Geocaching
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FoundGeocache>()
-                .HasKey(c => new { c.GeocasheId, c.PersonId });
+                .HasKey(c => new { c.GeocasheID, c.PersonID});
         }
+        
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             {

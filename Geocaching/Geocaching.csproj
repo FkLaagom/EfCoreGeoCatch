@@ -262,6 +262,26 @@
     <Compile Include="Migrations\20190319150208_test6.designer.cs">
       <DependentUpon>20190319150208_test6.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190319210140_LoadDatabase.cs" />
+    <Compile Include="Migrations\20190319210140_LoadDatabase.designer.cs">
+      <DependentUpon>20190319210140_LoadDatabase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319210546_LoadDatabase2.cs" />
+    <Compile Include="Migrations\20190319210546_LoadDatabase2.designer.cs">
+      <DependentUpon>20190319210546_LoadDatabase2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319214400_fuck.cs" />
+    <Compile Include="Migrations\20190319214400_fuck.designer.cs">
+      <DependentUpon>20190319214400_fuck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319231646_loadDatabasimus.cs" />
+    <Compile Include="Migrations\20190319231646_loadDatabasimus.designer.cs">
+      <DependentUpon>20190319231646_loadDatabasimus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319232213_Boss.cs" />
+    <Compile Include="Migrations\20190319232213_Boss.designer.cs">
+      <DependentUpon>20190319232213_Boss.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">
