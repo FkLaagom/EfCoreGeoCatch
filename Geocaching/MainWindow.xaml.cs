@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Geocaching.Models;
 
 namespace Geocaching
 {
@@ -136,12 +137,20 @@ namespace Geocaching
                 return;
             }
 
-            string city = dialog.AddressCity;
-            string country = dialog.AddressCountry;
-            string streetName = dialog.AddressStreetName;
-            int streetNumber = dialog.AddressStreetNumber;
-            // Add person to map and database here.
-            var pin = AddPin(latestClickLocation, "Person", Colors.Blue);
+            var person = new Person
+            {
+                FirstName = dialog.PersonFirstName,
+                LastName = dialog.PersonLastName,
+                Latitude = latestClickLocation.Latitude,
+                Longitude = latestClickLocation.Longitude,
+                Country = dialog.AddressCountry,
+                City = dialog.AddressCity,
+                StreetName = dialog.AddressStreetName,
+                StreetNumber = dialog.AddressStreetNumber
+            };
+            var t = AddPersonAsync(person);
+
+            var pin = AddPin(latestClickLocation, person.FirstName, Colors.Blue);
 
             pin.MouseDown += (s, a) =>
             {
@@ -194,6 +203,15 @@ namespace Geocaching
 
             string path = dialog.FileName;
             // Write to the selected file here.
+        }
+
+        private static async Task AddPersonAsync(Person person)
+        {
+            using (var context = new AppDbContext())
+            {
+                context.Persons.Add(person);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
