@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Geocaching.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Geocaching
 {
@@ -28,6 +29,7 @@ namespace Geocaching
         private readonly string applicationId = "AlkAgPVerBBqzh_R2hMjn3aFu4ymqxo2PObuhkEwN-hZDA5VcjGgsTa8aVK8gnSV";
 
         private MapLayer layer;
+        private Person SelectedPerson;
 
         // Contains the location of the latest click on the map.
         // The Location object in turn contains information like longitude and latitude.
@@ -111,10 +113,25 @@ namespace Geocaching
                 return;
             }
 
-            string contents = dialog.GeocacheContents;
-            string message = dialog.GeocacheMessage;
+            var geocache = new Geocashe
+            {
+                Latitude = latestClickLocation.Latitude,
+                Longitude = latestClickLocation.Longitude,
+                Content = dialog.GeocacheContents,
+                Message = dialog.GeocacheMessage,
+            };
+
+            //var t = Task.Run(() => AddGeocasheAsync(geocache));
+
+            using (var context = new AppDbContext())
+            {
+                geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
+                context.Geocashes.Add(geocache);
+                context.SaveChanges();
+            }
+
             // Add geocache to map and database here.
-            var pin = AddPin(latestClickLocation, "Person", Colors.Gray);
+            var pin = AddPin(latestClickLocation, geocache.Message, Colors.Gray);
 
             pin.MouseDown += (s, a) =>
             {
@@ -148,20 +165,22 @@ namespace Geocaching
                 StreetName = dialog.AddressStreetName,
                 StreetNumber = dialog.AddressStreetNumber
             };
-            var t = AddPersonAsync(person);
 
             string pinInfo = person.FirstName + " " + person.LastName + "\n " + person.StreetName + " " + person.StreetNumber;
             var pin = AddPin(latestClickLocation, pinInfo, Colors.Blue);
 
             pin.MouseDown += (s, a) =>
             {
+                SelectedPerson = person;
                 // Handle click on person pin here.
-                MessageBox.Show("You clicked a person");
+                MessageBox.Show(person.FirstName + " Selected!");
                 UpdateMap();
 
                 // Prevent click from being triggered on map.
                 a.Handled = true;
             };
+
+            AddPersonAsync(person);
         }
 
         private Pushpin AddPin(Location location, string tooltip, Color color)
@@ -206,7 +225,7 @@ namespace Geocaching
             // Write to the selected file here.
         }
 
-        private static async Task AddPersonAsync(Person person)
+        private static async void AddPersonAsync(Person person)
         {
             using (var context = new AppDbContext())
             {
@@ -214,5 +233,14 @@ namespace Geocaching
                 await context.SaveChangesAsync();
             }
         }
+
+        //private static async Task AddGeocasheAsync(Geocashe geocasche)
+        //{
+        //    using (var context = new AppDbContext())
+        //    {
+        //        context.Geocashes.Add(geocasche);
+        //        await context.SaveChangesAsync();
+        //    }
+        //}
     }
 }
