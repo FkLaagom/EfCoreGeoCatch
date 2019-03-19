@@ -240,6 +240,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Database\LoadDatabase.cs" />
+    <Compile Include="Database\SaveDatabase.cs" />
     <Compile Include="Migrations\20190319122828_First.cs" />
     <Compile Include="Migrations\20190319122828_First.designer.cs">
       <DependentUpon>20190319122828_First.cs</DependentUpon>
@@ -311,9 +313,7 @@
   <ItemGroup>
     <Resource Include="Geocaches.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Database\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

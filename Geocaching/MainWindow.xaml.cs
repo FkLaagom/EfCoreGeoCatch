@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Geocaching.Models;
 using Microsoft.EntityFrameworkCore;
+using Geocaching.Database;
 
 namespace Geocaching
 {
@@ -206,7 +207,7 @@ namespace Geocaching
             }
 
             string path = dialog.FileName;
-            // Read the selected file here.
+            LoadDatabase.FromFlatFile(path);
         }
 
         private void OnSaveToFileClick(object sender, RoutedEventArgs args)
@@ -222,7 +223,7 @@ namespace Geocaching
             }
 
             string path = dialog.FileName;
-            // Write to the selected file here.
+            SaveDatabase.ToFlatFile(path);
         }
 
         private static async void AddPersonAsync(Person person)
