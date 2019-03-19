@@ -244,6 +244,18 @@
     <Compile Include="Migrations\20190319122828_First.designer.cs">
       <DependentUpon>20190319122828_First.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190319133612_test2.cs" />
+    <Compile Include="Migrations\20190319133612_test2.designer.cs">
+      <DependentUpon>20190319133612_test2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319134141_test3.cs" />
+    <Compile Include="Migrations\20190319134141_test3.designer.cs">
+      <DependentUpon>20190319134141_test3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319134614_test4.cs" />
+    <Compile Include="Migrations\20190319134614_test4.designer.cs">
+      <DependentUpon>20190319134614_test4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">

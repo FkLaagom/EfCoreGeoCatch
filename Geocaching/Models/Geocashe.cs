@@ -14,8 +14,10 @@ namespace Geocaching.Models
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         [MaxLength(255)]
+        [Required]
         public string Content { get; set; }
         [MaxLength(255)]
+        [Required]
         public string Message { get; set; }
         public Person Person { get; set; }
     }

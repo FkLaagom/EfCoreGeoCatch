@@ -4,14 +4,16 @@ using Geocaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Geocaching.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190319134141_test3")]
+    partial class test3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,6 @@ namespace Geocaching.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.Property<double>("Latitude");
@@ -47,7 +48,6 @@ namespace Geocaching.Migrations
                     b.Property<double>("Longitude");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasMaxLength(255);
 
                     b.Property<int?>("PersonID");
@@ -66,19 +66,15 @@ namespace Geocaching.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("City")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("Country")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<double>("Latitude");
@@ -86,7 +82,6 @@ namespace Geocaching.Migrations
                     b.Property<double>("Longitude");
 
                     b.Property<string>("StreetName")
-                        .IsRequired()
                         .HasMaxLength(50);
 
                     b.Property<byte>("StreetNumber");
