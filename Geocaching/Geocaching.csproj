@@ -282,6 +282,18 @@
     <Compile Include="Migrations\20190319232213_Boss.designer.cs">
       <DependentUpon>20190319232213_Boss.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190319233830_1337.cs" />
+    <Compile Include="Migrations\20190319233830_1337.designer.cs">
+      <DependentUpon>20190319233830_1337.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190319234935_updateIdNull.cs" />
+    <Compile Include="Migrations\20190319234935_updateIdNull.designer.cs">
+      <DependentUpon>20190319234935_updateIdNull.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190320105103_asd.cs" />
+    <Compile Include="Migrations\20190320105103_asd.designer.cs">
+      <DependentUpon>20190320105103_asd.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">
