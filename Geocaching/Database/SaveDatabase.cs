@@ -26,5 +26,4 @@ namespace Geocaching.Database
             File.WriteAllLines(path,linesToWrite);
         }
     }
-
 }
