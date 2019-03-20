@@ -294,6 +294,10 @@
     <Compile Include="Migrations\20190320105103_asd.designer.cs">
       <DependentUpon>20190320105103_asd.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190320220111_iCollections.cs" />
+    <Compile Include="Migrations\20190320220111_iCollections.designer.cs">
+      <DependentUpon>20190320220111_iCollections.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">

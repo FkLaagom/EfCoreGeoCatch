@@ -30,5 +30,8 @@ namespace Geocaching.Models
         public string StreetName { get; set; }
         public byte StreetNumber { get; set; }
 
+        public ICollection<Geocashe> Geocashes { get; set; }
+        public ICollection<FoundGeocache> FoundGeocaches { get; set; }
+
     }
 }
