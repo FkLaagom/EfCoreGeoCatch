@@ -67,7 +67,7 @@ namespace Geocaching.Database
             PupulateDatabase();
         }
 
-#warning makeAsync
+#warning MakeAsync
         private static void PupulateDatabase()
         {
             using (var context = new AppDbContext())
