@@ -10,7 +10,10 @@ namespace Geocaching.Database
     {
         public static void ToFlatFile(string path)
         {
+            using(var context = new AppDbContext())
+            {
 
+            }
         }
     }
 }
