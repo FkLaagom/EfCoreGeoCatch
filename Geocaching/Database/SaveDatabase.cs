@@ -20,8 +20,7 @@ namespace Geocaching.Database
             persons.ForEach(p => {
                 linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Latitude} | {p.Longitude}");
                 p.Geocashes.ToList().ForEach(g => linesToWrite.Add($"{geocashes.IndexOf(g) + 1} | {g.Latitude} | {g.Longitude} | {g.Content} | {g.Message}"));
-                linesToWrite.Add($"Found: {string.Join(", ", p.FoundGeocaches.Select(x => geocashes.IndexOf(x.Geocashe)).Select(X => (X + 1).ToString()).ToArray())}");
-                linesToWrite.Add("");
+                linesToWrite.Add($"Found: {string.Join(", ", p.FoundGeocaches.Select(x => geocashes.IndexOf(x.Geocashe)).Select(X => (X + 1).ToString()).ToArray())}\r\n");
             });
             File.WriteAllLines(path,linesToWrite);
         }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Geocaching"
         mc:Ignorable="d"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
-        Title="Geocaching" Height="450" Width="800">
+        Title="Geocaching" Height="800" Width="1200">
     <Grid>
         <m:Map x:Name="map"/>
         <StackPanel Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top">
