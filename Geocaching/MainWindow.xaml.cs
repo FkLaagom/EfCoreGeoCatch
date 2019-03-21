@@ -31,6 +31,13 @@ namespace Geocaching
 
         private MapLayer layer;
         private Person SelectedPerson;
+        class PinHandler
+        {
+            private static void AddPin()
+            {
+
+            }
+        }
 
         // Contains the location of the latest click on the map.
         // The Location object in turn contains information like longitude and latitude.

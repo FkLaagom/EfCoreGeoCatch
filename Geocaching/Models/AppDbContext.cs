@@ -1,5 +1,6 @@
 ﻿using Geocaching.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 namespace Geocaching
 {
@@ -9,16 +10,16 @@ namespace Geocaching
             public DbSet<Geocashe> Geocashes { get; set; }
             public DbSet<FoundGeocache> FoundGeocaches { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<FoundGeocache>()
-                .HasKey(c => new { c.GeocasheID, c.PersonID});
-        }
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                modelBuilder.Entity<FoundGeocache>()
+                    .HasKey(c => new { c.GeocasheID, c.PersonID});
+            }
         
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            {
-                optionsBuilder.UseSqlServer(SqlConnection.ConnectionString);
-            }
+             protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+             {
+                optionsBuilder.UseSqlServer(ConfigurationManager.ConnectionStrings["GeocasheDatabase"].ConnectionString);
+             }
         }
 }
