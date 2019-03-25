@@ -4,18 +4,19 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Geocaching.Database
 {
     public static class SaveDatabase
     {
-        public static void ToFlatFile(string path)
+        public static async Task ToFlatFile(string path)
         {
             var linesToWrite = new List<string>();
             var geocashes = new List<Geocashe>();
             List<Person> persons;
             using (var context = new AppDbContext())
-                persons = context.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToList();
+                persons =  await context.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
             persons.ForEach(x => x.Geocashes.ToList().ForEach(g => geocashes.Add(g)));
             persons.ForEach(p => {
                 linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Latitude} | {p.Longitude}");

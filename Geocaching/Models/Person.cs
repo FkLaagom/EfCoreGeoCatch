@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Maps.MapControl.WPF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Geocaching.Models
     {
         [Key]
         public int ID { get; set; }
+        public Location Locations { get; set; }
         [MaxLength(50)]
         [Required]
         public string FirstName { get; set; }

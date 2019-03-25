@@ -135,7 +135,7 @@ namespace Geocaching
             {
                 geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
                 context.Geocashes.Add(geocache);
-                context.SaveChanges();
+                context.SaveChangesAsync();
             }
 
             // Add geocache to map and database here.
@@ -200,10 +200,11 @@ namespace Geocaching
             ToolTipService.SetToolTip(pin, tooltip);
             ToolTipService.SetInitialShowDelay(pin, 0);
             layer.AddChild(pin, new Location(location.Latitude, location.Longitude));
+            
             return pin;
         }
 
-        private void OnLoadFromFileClick(object sender, RoutedEventArgs args)
+        private async void OnLoadFromFileClick(object sender, RoutedEventArgs args)
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
             dialog.DefaultExt = ".txt";
@@ -215,10 +216,10 @@ namespace Geocaching
             }
 
             string path = dialog.FileName;
-            LoadDatabase.FromFlatFile(path);
+            await LoadDatabase.FromFlatFile(path);
         }
 
-        private void OnSaveToFileClick(object sender, RoutedEventArgs args)
+        private async void OnSaveToFileClick(object sender, RoutedEventArgs args)
         {
             var dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.DefaultExt = ".txt";
@@ -231,7 +232,7 @@ namespace Geocaching
             }
 
             string path = dialog.FileName;
-            SaveDatabase.ToFlatFile(path);
+            await SaveDatabase.ToFlatFile(path);
         }
 
         private static async void AddPersonAsync(Person person)

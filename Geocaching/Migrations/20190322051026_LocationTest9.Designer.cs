@@ -4,14 +4,16 @@ using Geocaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Geocaching.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190322051026_LocationTest9")]
+    partial class LocationTest9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,10 +131,10 @@ namespace Geocaching.Migrations
                             b1.Property<int>("AltitudeReference");
 
                             b1.Property<double>("Latitude")
-                                .HasColumnName("LatitudeHEHE")
-                                .HasColumnType("FLOAT");
+                                .HasColumnName("LatitudeHEHE");
 
-                            b1.Property<double>("Longitude");
+                            b1.Property<double>("Longitude")
+                                .HasColumnName("LongitudeHEHE");
 
                             b1.HasKey("PersonID");
 

@@ -4,14 +4,16 @@ using Geocaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Geocaching.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190322050739_LocationTest8")]
+    partial class LocationTest8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -81,9 +83,11 @@ namespace Geocaching.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<double>("Latitude");
+                    b.Property<double>("Latitude")
+                        .HasColumnName("Person_Latitude");
 
-                    b.Property<double>("Longitude");
+                    b.Property<double>("Longitude")
+                        .HasColumnName("Person_Longitude");
 
                     b.Property<string>("StreetName")
                         .IsRequired()
@@ -129,10 +133,10 @@ namespace Geocaching.Migrations
                             b1.Property<int>("AltitudeReference");
 
                             b1.Property<double>("Latitude")
-                                .HasColumnName("LatitudeHEHE")
-                                .HasColumnType("FLOAT");
+                                .HasColumnName("Latitude");
 
-                            b1.Property<double>("Longitude");
+                            b1.Property<double>("Longitude")
+                                .HasColumnName("Longitude");
 
                             b1.HasKey("PersonID");
 

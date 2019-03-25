@@ -16,7 +16,6 @@ namespace Geocaching.Database
         private static List<FoundGeocache> _foundGeocashes;
         private static List<KeyValuePair<Person, List<int>>> _foundGeocacheIDs;
 
-
         static LoadDatabase()
         {
             _persons = new List<Person>();
@@ -25,12 +24,9 @@ namespace Geocaching.Database
             _foundGeocacheIDs = new List<KeyValuePair<Person, List<int>>>();
         }
 
-        public static void FromFlatFile(string path)
+        public static async Task FromFlatFile(string path)
         {
-            //var emptyDatabase = EmptyDatabase();
-            // emptyDatabase.Wait();
-            //Task.WaitAll(emptyDatabase);
-            
+            var emptyDatabase =  EmptyDatabaseAsync();
 
             var lines = File.ReadAllLines(path);
             LineToPersson(lines[0]);
@@ -64,46 +60,28 @@ namespace Geocaching.Database
                 }
             }
 
-            PupulateDatabase();
+            await emptyDatabase;
+            await PupulateDatabase();
         }
 
-#warning MakeAsync
-        private static void PupulateDatabase()
+        private static async Task PupulateDatabase()
         {
             using (var context = new AppDbContext())
             {
                 context.Persons.AddRange(_persons);
                 context.Geocashes.AddRange(_geocashes);
                 context.FoundGeocaches.AddRange(_foundGeocashes);
-                context.SaveChanges();
-            }
-        }
-#warning Remove -> Use Async Below
-        private static void EmptyDatabaseSync()
-        {
-            using(var context = new AppDbContext())
-            {
-                var foundGeocaches = context.FoundGeocaches.ToList();
-                var geocaches = context.Geocashes.ToList();
-                var persons = context.Persons.ToList();
-                context.FoundGeocaches.RemoveRange(foundGeocaches);
-                context.Geocashes.RemoveRange(geocaches);
-                context.Persons.RemoveRange(persons);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
-        private static async Task EmptyDatabase()
+        private static async Task EmptyDatabaseAsync()
         {
             using (var context = new AppDbContext())
             {
-                //var foundGeocaches = await context.FoundGeocaches.ToListAsync();
-                //var geocaches = await context.Geocashes.ToListAsync();
-                //var persons = await context.Persons.ToListAsync();
-
-                var foundGeocaches = context.FoundGeocaches.ToList();
-                var geocaches = context.Geocashes.ToList();
-                var persons = context.Persons.ToList();
+                var foundGeocaches = await context.FoundGeocaches.ToListAsync();
+                var geocaches = await context.Geocashes.ToListAsync();
+                var persons = await context.Persons.ToListAsync();
                 context.FoundGeocaches.RemoveRange(foundGeocaches);
                 context.Geocashes.RemoveRange(geocaches);
                 context.Persons.RemoveRange(persons);

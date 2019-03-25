@@ -299,6 +299,42 @@
     <Compile Include="Migrations\20190320220111_iCollections.designer.cs">
       <DependentUpon>20190320220111_iCollections.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190322044521_LocationTest3.cs" />
+    <Compile Include="Migrations\20190322044521_LocationTest3.designer.cs">
+      <DependentUpon>20190322044521_LocationTest3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322044924_LocationTest4.cs" />
+    <Compile Include="Migrations\20190322044924_LocationTest4.designer.cs">
+      <DependentUpon>20190322044924_LocationTest4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322045231_LocationTest5.cs" />
+    <Compile Include="Migrations\20190322045231_LocationTest5.designer.cs">
+      <DependentUpon>20190322045231_LocationTest5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322045946_LocationTest6.cs" />
+    <Compile Include="Migrations\20190322045946_LocationTest6.designer.cs">
+      <DependentUpon>20190322045946_LocationTest6.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322050216_LocationTest7.cs" />
+    <Compile Include="Migrations\20190322050216_LocationTest7.designer.cs">
+      <DependentUpon>20190322050216_LocationTest7.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322050739_LocationTest8.cs" />
+    <Compile Include="Migrations\20190322050739_LocationTest8.designer.cs">
+      <DependentUpon>20190322050739_LocationTest8.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322051026_LocationTest9.cs" />
+    <Compile Include="Migrations\20190322051026_LocationTest9.designer.cs">
+      <DependentUpon>20190322051026_LocationTest9.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322051722_LocationTest91.cs" />
+    <Compile Include="Migrations\20190322051722_LocationTest91.designer.cs">
+      <DependentUpon>20190322051722_LocationTest91.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190322052208_LocationTest99.cs" />
+    <Compile Include="Migrations\20190322052208_LocationTest99.designer.cs">
+      <DependentUpon>20190322052208_LocationTest99.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">

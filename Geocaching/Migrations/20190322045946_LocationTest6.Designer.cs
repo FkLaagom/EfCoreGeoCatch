@@ -4,14 +4,16 @@ using Geocaching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Geocaching.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190322045946_LocationTest6")]
+    partial class LocationTest6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,6 +98,19 @@ namespace Geocaching.Migrations
                     b.ToTable("Persons");
                 });
 
+            modelBuilder.Entity("Geocaching.Models.Place", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Age");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Places");
+                });
+
             modelBuilder.Entity("Geocaching.Models.FoundGeocache", b =>
                 {
                     b.HasOne("Geocaching.Models.Geocashe", "Geocashe")
@@ -116,11 +131,11 @@ namespace Geocaching.Migrations
                         .HasForeignKey("PersonID");
                 });
 
-            modelBuilder.Entity("Geocaching.Models.Person", b =>
+            modelBuilder.Entity("Geocaching.Models.Place", b =>
                 {
-                    b.OwnsOne("Microsoft.Maps.MapControl.WPF.Location", "Locations", b1 =>
+                    b.OwnsOne("Microsoft.Maps.MapControl.WPF.Location", "Location", b1 =>
                         {
-                            b1.Property<int>("PersonID")
+                            b1.Property<int>("PlaceID")
                                 .ValueGeneratedOnAdd()
                                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -129,18 +144,20 @@ namespace Geocaching.Migrations
                             b1.Property<int>("AltitudeReference");
 
                             b1.Property<double>("Latitude")
-                                .HasColumnName("LatitudeHEHE")
+                                .HasColumnName("Latitude")
                                 .HasColumnType("FLOAT");
 
-                            b1.Property<double>("Longitude");
+                            b1.Property<double>("Longitude")
+                                .HasColumnName("Longitude")
+                                .HasColumnType("FLOAT");
 
-                            b1.HasKey("PersonID");
+                            b1.HasKey("PlaceID");
 
-                            b1.ToTable("Persons");
+                            b1.ToTable("Places");
 
-                            b1.HasOne("Geocaching.Models.Person")
-                                .WithOne("Locations")
-                                .HasForeignKey("Microsoft.Maps.MapControl.WPF.Location", "PersonID")
+                            b1.HasOne("Geocaching.Models.Place")
+                                .WithOne("Location")
+                                .HasForeignKey("Microsoft.Maps.MapControl.WPF.Location", "PlaceID")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
                 });
