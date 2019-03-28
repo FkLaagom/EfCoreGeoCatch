@@ -31,6 +31,7 @@ namespace Geocaching
 
         private MapLayer layer;
         private Person SelectedPerson;
+
         class PinHandler
         {
             private static void AddPin()
@@ -118,6 +119,12 @@ namespace Geocaching
             dialog.ShowDialog();
             if (dialog.DialogResult == false)
             {
+                return;
+            }
+
+            if (SelectedPerson == null)
+            {
+                MessageBox.Show("Select a person!");
                 return;
             }
 
