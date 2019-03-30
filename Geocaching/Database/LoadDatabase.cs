@@ -61,6 +61,9 @@ namespace Geocaching.Database
             }
 
             await emptyDatabase;
+
+            emptyDatabase.Wait();
+
             await PupulateDatabase();
         }
 
@@ -95,8 +98,8 @@ namespace Geocaching.Database
             var geocashe = new Geocashe
             {
                 Person = _persons.LastOrDefault(),
-                Longitude = double.Parse(parms[1]),
-                Latitude = double.Parse(parms[2]),
+                Latitude = double.Parse(parms[1]),
+                Longitude = double.Parse(parms[2]),
                 Content = parms[3],
                 Message = parms[4],
             };
@@ -120,15 +123,15 @@ namespace Geocaching.Database
             var parms = line.Split('|').Select(x => x.Trim()).ToArray();
             var person = new Person()
             {
-
                 FirstName = parms[0],
                 LastName = parms[1],
                 Country = parms[2],
                 City = parms[3],
                 StreetName = parms[4],
                 StreetNumber = Convert.ToByte(parms[5]),
-                Latitude = Convert.ToDouble(parms[6]),
-                Longitude = Convert.ToDouble(parms[7])
+                Locations = new Microsoft.Maps.MapControl.WPF.Location(Convert.ToDouble(parms[6]), Convert.ToDouble(parms[7]))
+                //Latitude = Convert.ToDouble(parms[6]),
+                //Longitude = Convert.ToDouble(parms[7])
             };
             _persons.Add(person);
         }

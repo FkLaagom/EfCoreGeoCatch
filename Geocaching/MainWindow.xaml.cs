@@ -112,7 +112,7 @@ namespace Geocaching
             UpdateMap();
         }
 #warning MakeAsync
-        private void OnAddGeocacheClick(object sender, RoutedEventArgs args)
+        private async void OnAddGeocacheClick(object sender, RoutedEventArgs args)
         {
             var dialog = new GeocacheDialog();
             dialog.Owner = this;
@@ -142,7 +142,7 @@ namespace Geocaching
             {
                 geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
                 context.Geocashes.Add(geocache);
-                context.SaveChangesAsync();
+               await context.SaveChangesAsync();
             }
 
             // Add geocache to map and database here.
@@ -174,8 +174,9 @@ namespace Geocaching
             {
                 FirstName = dialog.PersonFirstName,
                 LastName = dialog.PersonLastName,
-                Latitude = latestClickLocation.Latitude,
-                Longitude = latestClickLocation.Longitude,
+                Locations = new Location(latestClickLocation.Latitude, latestClickLocation.Longitude),
+                //Latitude = latestClickLocation.Latitude,
+                //Longitude = latestClickLocation.Longitude,
                 Country = dialog.AddressCountry,
                 City = dialog.AddressCity,
                 StreetName = dialog.AddressStreetName,
@@ -247,8 +248,10 @@ namespace Geocaching
             using (var context = new AppDbContext())
             {
                 context.Persons.Add(person);
+                
                 await context.SaveChangesAsync();
             }
+            //Database.SaveDatabase(person);
         }
 
         //private static async Task AddGeocasheAsync(Geocashe geocasche)

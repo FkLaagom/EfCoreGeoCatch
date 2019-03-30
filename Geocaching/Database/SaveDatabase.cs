@@ -16,14 +16,17 @@ namespace Geocaching.Database
             var geocashes = new List<Geocashe>();
             List<Person> persons;
             using (var context = new AppDbContext())
-                persons =  await context.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
+                persons = await context.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
             persons.ForEach(x => x.Geocashes.ToList().ForEach(g => geocashes.Add(g)));
-            persons.ForEach(p => {
-                linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Latitude} | {p.Longitude}");
+            persons.ForEach(p =>
+            {
+                if (linesToWrite.Any())
+                    linesToWrite.Add("");
+                linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Locations.Latitude} | {p.Locations.Longitude}");
                 p.Geocashes.ToList().ForEach(g => linesToWrite.Add($"{geocashes.IndexOf(g) + 1} | {g.Latitude} | {g.Longitude} | {g.Content} | {g.Message}"));
-                linesToWrite.Add($"Found: {string.Join(", ", p.FoundGeocaches.Select(x => geocashes.IndexOf(x.Geocashe)).Select(X => (X + 1).ToString()).ToArray())}\r\n");
+                linesToWrite.Add($"Found: {string.Join(", ", p.FoundGeocaches.Select(x => geocashes.IndexOf(x.Geocashe)).Select(X => (X + 1).ToString()).ToArray())}");
             });
-            File.WriteAllLines(path,linesToWrite);
+            File.WriteAllText(path, string.Join("\r\n", linesToWrite));
         }
     }
 }
