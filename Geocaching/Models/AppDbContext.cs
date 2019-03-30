@@ -15,9 +15,20 @@ namespace Geocaching
             modelBuilder.Entity<FoundGeocache>()
                 .HasKey(c => new { c.GeocasheID, c.PersonID });
 
-            var clas1Entity = modelBuilder.Entity<Person>();
-            clas1Entity.OwnsOne(
-                                o => o.Locations,
+            var personEntity = modelBuilder.Entity<Person>();
+            personEntity.OwnsOne(
+                                o => o.Location,
+                                nestedProp =>
+                                {
+                                    nestedProp.Property(p => p.Latitude).HasColumnName("Latitude").HasColumnType("FLOAT");
+                                    nestedProp.Property(p => p.Longitude).HasColumnName("Longitude").HasColumnType("FLOAT");
+                                    nestedProp.Ignore(p => p.Altitude);
+                                    nestedProp.Ignore(p => p.AltitudeReference);
+                                });
+
+            var geoEntity = modelBuilder.Entity<Geocashe>();
+            geoEntity.OwnsOne(
+                                o => o.Location,
                                 nestedProp =>
                                 {
                                     nestedProp.Property(p => p.Latitude).HasColumnName("Latitude").HasColumnType("FLOAT");

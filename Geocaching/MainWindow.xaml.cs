@@ -66,7 +66,41 @@ namespace Geocaching
 
             using (var db = new AppDbContext())
             {
+                var p = db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToList();
+
                 // Load data from database and populate map here.
+                p.ForEach(person =>
+                {
+                    string pinInfo = person.FirstName + " " + person.LastName + "\n " + person.StreetName + " " + person.StreetNumber;
+                    var pin = AddPin(person.Location, pinInfo, Colors.Blue);
+
+                    pin.MouseDown += (s, a) =>
+                    {
+                        SelectedPerson = person;
+                        // Handle click on person pin here.
+                        MessageBox.Show(person.FirstName + " Selected!");
+                        UpdateMap();
+
+                        // Prevent click from being triggered on map.
+                        a.Handled = true;
+                    };
+
+                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
+                    {
+                        string pinGeoInfo = "Geo position added by " + person.FirstName + " " + person.LastName;
+                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray);
+
+                        pin.MouseDown += (s, a) =>
+                        {
+                            // Handle click on geocache pin here.
+                            MessageBox.Show("You clicked a geocache");
+                            UpdateMap();
+
+                            // Prevent click from being triggered on map.
+                            a.Handled = true;
+                        };
+                    });
+                });
             }
         }
 
@@ -130,8 +164,7 @@ namespace Geocaching
 
             var geocache = new Geocashe
             {
-                Latitude = latestClickLocation.Latitude,
-                Longitude = latestClickLocation.Longitude,
+                Location = latestClickLocation,
                 Content = dialog.GeocacheContents,
                 Message = dialog.GeocacheMessage,
             };
@@ -174,9 +207,7 @@ namespace Geocaching
             {
                 FirstName = dialog.PersonFirstName,
                 LastName = dialog.PersonLastName,
-                Locations = new Location(latestClickLocation.Latitude, latestClickLocation.Longitude),
-                //Latitude = latestClickLocation.Latitude,
-                //Longitude = latestClickLocation.Longitude,
+                Location = new Location(latestClickLocation.Latitude, latestClickLocation.Longitude),
                 Country = dialog.AddressCountry,
                 City = dialog.AddressCity,
                 StreetName = dialog.AddressStreetName,
@@ -251,7 +282,6 @@ namespace Geocaching
                 
                 await context.SaveChangesAsync();
             }
-            //Database.SaveDatabase(person);
         }
 
         //private static async Task AddGeocasheAsync(Geocashe geocasche)

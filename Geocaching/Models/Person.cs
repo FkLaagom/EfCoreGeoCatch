@@ -12,7 +12,7 @@ namespace Geocaching.Models
     {
         [Key]
         public int ID { get; set; }
-        public Location Locations { get; set; }
+        public Location Location { get; set; }
         [MaxLength(50)]
         [Required]
         public string FirstName { get; set; }

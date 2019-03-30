@@ -22,8 +22,8 @@ namespace Geocaching.Database
             {
                 if (linesToWrite.Any())
                     linesToWrite.Add("");
-                linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Locations.Latitude} | {p.Locations.Longitude}");
-                p.Geocashes.ToList().ForEach(g => linesToWrite.Add($"{geocashes.IndexOf(g) + 1} | {g.Latitude} | {g.Longitude} | {g.Content} | {g.Message}"));
+                linesToWrite.Add($"{p.FirstName} | {p.LastName} | {p.Country} | {p.City} | {p.StreetName} | {p.StreetNumber} | {p.Location.Latitude} | {p.Location.Longitude}");
+                p.Geocashes.ToList().ForEach(g => linesToWrite.Add($"{geocashes.IndexOf(g) + 1} | {g.Location.Latitude} | {g.Location.Longitude} | {g.Content} | {g.Message}"));
                 linesToWrite.Add($"Found: {string.Join(", ", p.FoundGeocaches.Select(x => geocashes.IndexOf(x.Geocashe)).Select(X => (X + 1).ToString()).ToArray())}");
             });
             File.WriteAllText(path, string.Join("\r\n", linesToWrite));
