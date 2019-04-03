@@ -71,30 +71,21 @@ namespace Geocaching
                 // Load data from database and populate map here.
                 p.ForEach(person =>
                 {
-                    string pinInfo = person.FirstName + " " + person.LastName + "\n " + person.StreetName + " " + person.StreetNumber;
-                    var pin = AddPin(person.Location, pinInfo, Colors.Blue);
-
-                    pin.MouseDown += (s, a) =>
-                    {
-                        SelectedPerson = person;
-                        // Handle click on person pin here.
-                        MessageBox.Show(person.FirstName + " Selected!");
-                        UpdateMap();
-
-                        // Prevent click from being triggered on map.
-                        a.Handled = true;
-                    };
+                    AddPersonPin(person);
 
                     person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
                     {
-                        string pinGeoInfo = "Geo position added by " + person.FirstName + " " + person.LastName;
-                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray);
+                        string pinGeoInfo = $"Geo cache\n" +
+                                            $"Added by {person.FirstName } {person.LastName}\n" +
+                                            $"Longitude: {geo.Location.Longitude}\n" +
+                                            $"Latitude: {geo.Location.Latitude}\n" +
+                                            $"Message: {geo.Message}";
 
-                        pin.MouseDown += (s, a) =>
+                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
+
+                        pinGeo.MouseDown += (s, a) =>
                         {
-                            // Handle click on geocache pin here.
-                            MessageBox.Show("You clicked a geocache");
-                            UpdateMap();
+                            SelectGeoPin(pinGeo, geo);
 
                             // Prevent click from being triggered on map.
                             a.Handled = true;
@@ -143,6 +134,24 @@ namespace Geocaching
         private void OnMapLeftClick()
         {
             // Handle map click here.
+
+            SelectedPerson = null;
+
+            foreach (UIElement element in layer.Children)
+            {
+                if (element is Pushpin)
+                {
+                    element.Opacity = 1.0;
+
+                    var pin = (Pushpin)element;
+
+                    if (pin.Tag is Geocashe)
+                    {
+                        pin.Background = new SolidColorBrush(Colors.Gray);
+                    }
+                }
+            }
+
             UpdateMap();
         }
 #warning MakeAsync
@@ -175,21 +184,114 @@ namespace Geocaching
             {
                 geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
                 context.Geocashes.Add(geocache);
-               await context.SaveChangesAsync();
+                await context.SaveChangesAsync();
             }
 
             // Add geocache to map and database here.
-            var pin = AddPin(latestClickLocation, geocache.Message, Colors.Gray);
+            var pin = AddPin(latestClickLocation, geocache.Message, Colors.Gray, geocache);
 
             pin.MouseDown += (s, a) =>
             {
-                // Handle click on geocache pin here.
-                MessageBox.Show("You clicked a geocache");
-                UpdateMap();
+                SelectGeoPin(pin, geocache);
 
                 // Prevent click from being triggered on map.
                 a.Handled = true;
             };
+        }
+
+        private Pushpin AddPersonPin(Person person)
+        {
+            string pinInfo = $"{person.FirstName} {person.LastName}\n{person.StreetName} {person.StreetNumber}";
+
+            var pin = AddPin(person.Location, pinInfo, Colors.Blue, person);
+
+            //när vi klickar på en  person så ska pin ändra färg till halv grå?
+            pin.MouseDown += (s, a) =>
+            {
+                SelectPersonPin(pin, person);
+
+                // Prevent click from being triggered on map.
+                a.Handled = true;
+            };
+
+            return pin;
+        }
+
+        private void SelectGeoPin(Pushpin pin, Geocashe geo)
+        {
+            // Handle click on geocache pin here.
+            if (SelectedPerson == null)
+            {
+                MessageBox.Show("Select a person first");
+            }
+            else
+            {
+                var found = SelectedPerson.FoundGeocaches.SingleOrDefault(f => f.Geocashe == geo);
+
+                if (found != null)
+                {
+                    SelectedPerson.FoundGeocaches.Remove(found);
+
+                    pin.Background = new SolidColorBrush(Colors.Red);
+
+                    //AddFoundGeoCacheAsync(found);
+                }
+                else
+                {
+                    var newFound = new FoundGeocache() { PersonID = SelectedPerson.ID, Person = SelectedPerson, Geocashe = geo, GeocasheID = geo.ID };
+
+                    SelectedPerson.FoundGeocaches.Add(newFound);
+
+                    pin.Background = new SolidColorBrush(Colors.Green);
+
+                    //RemoveFoundGeoCacheAsync(newFound);
+                }
+
+                UpdateMap();
+            }
+        }
+
+        private void SelectPersonPin(Pushpin pin, Person person)
+        {
+            // Handle click on person pin here.
+            SelectedPerson = person;
+
+            pin.Opacity = 1.0;
+
+            foreach (UIElement element in layer.Children)
+            {
+                if (element is Pushpin)
+                {
+                    var otherPin = (Pushpin)element;
+
+                    if (otherPin.Tag is Person)
+                    {
+                        if (pin != otherPin)
+                        {
+                            otherPin.Opacity = 0.5;
+                        }
+                    }
+                    else if (otherPin.Tag is Geocashe)
+                    {
+                        var geo = (Geocashe)((Pushpin)otherPin).Tag;
+
+                        if (geo.Person == person)
+                        {
+                            otherPin.Background = new SolidColorBrush(Colors.Black);
+                        }
+                        else if (person.FoundGeocaches != null && person.FoundGeocaches.Any(g => g.Geocashe == geo))
+                        {
+                            otherPin.Background = new SolidColorBrush(Colors.Green);
+                        }
+                        else
+                        {
+                            otherPin.Background = new SolidColorBrush(Colors.Red);
+                        }
+                    }
+                }
+            }
+
+            UpdateMap();
         }
 
 #warning MakeAsync
@@ -214,32 +316,23 @@ namespace Geocaching
                 StreetNumber = dialog.AddressStreetNumber
             };
 
-            string pinInfo = person.FirstName + " " + person.LastName + "\n " + person.StreetName + " " + person.StreetNumber;
-            var pin = AddPin(latestClickLocation, pinInfo, Colors.Blue);
+            var pin = AddPersonPin(person);
 
-            pin.MouseDown += (s, a) =>
-            {
-                SelectedPerson = person;
-                // Handle click on person pin here.
-                MessageBox.Show(person.FirstName + " Selected!");
-                UpdateMap();
-
-                // Prevent click from being triggered on map.
-                a.Handled = true;
-            };
+            SelectPersonPin(pin, person);
 
             AddPersonAsync(person);
         }
 
-        private Pushpin AddPin(Location location, string tooltip, Color color)
+        private Pushpin AddPin(Location location, string tooltip, Color color, object tag)
         {
             var pin = new Pushpin();
+            pin.Tag = tag;
             pin.Cursor = Cursors.Hand;
             pin.Background = new SolidColorBrush(color);
             ToolTipService.SetToolTip(pin, tooltip);
             ToolTipService.SetInitialShowDelay(pin, 0);
             layer.AddChild(pin, new Location(location.Latitude, location.Longitude));
-            
+
             return pin;
         }
 
@@ -279,7 +372,27 @@ namespace Geocaching
             using (var context = new AppDbContext())
             {
                 context.Persons.Add(person);
-                
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async void AddFoundGeoCacheAsync(FoundGeocache geo)
+        {
+            using (var context = new AppDbContext())
+            {
+                context.FoundGeocaches.Add(geo);
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async void RemoveFoundGeoCacheAsync(FoundGeocache geo)
+        {
+            using (var context = new AppDbContext())
+            {
+                context.FoundGeocaches.Remove(geo);
+
                 await context.SaveChangesAsync();
             }
         }
