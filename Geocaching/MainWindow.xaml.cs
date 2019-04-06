@@ -64,35 +64,7 @@ namespace Geocaching
 
             CreateMap();
 
-            using (var db = new AppDbContext())
-            {
-                var p = db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToList();
-
-                // Load data from database and populate map here.
-                p.ForEach(person =>
-                {
-                    AddPersonPin(person);
-
-                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
-                    {
-                        string pinGeoInfo = $"Geo cache\n" +
-                                            $"Added by {person.FirstName } {person.LastName}\n" +
-                                            $"Longitude: {geo.Location.Longitude}\n" +
-                                            $"Latitude: {geo.Location.Latitude}\n" +
-                                            $"Message: {geo.Message}";
-
-                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
-
-                        pinGeo.MouseDown += (s, a) =>
-                        {
-                            SelectGeoPin(pinGeo, geo);
-
-                            // Prevent click from being triggered on map.
-                            a.Handled = true;
-                        };
-                    });
-                });
-            }
+            LoadMapDataFromDatabase();
         }
 
         private void CreateMap()
@@ -123,6 +95,41 @@ namespace Geocaching
             var addGeocacheMenuItem = new MenuItem { Header = "Add Geocache" };
             map.ContextMenu.Items.Add(addGeocacheMenuItem);
             addGeocacheMenuItem.Click += OnAddGeocacheClick;
+        }
+
+        private void LoadMapDataFromDatabase()
+        {
+            layer.Children.Clear();
+
+            using (var db = new AppDbContext())
+            {
+                var p = db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToList();
+
+                // Load data from database and populate map here.
+                p.ForEach(person =>
+                {
+                    AddPersonPin(person);
+
+                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
+                    {
+                        string pinGeoInfo = $"Geo cache\n" +
+                                            $"Added by {person.FirstName } {person.LastName}\n" +
+                                            $"Longitude: {geo.Location.Longitude}\n" +
+                                            $"Latitude: {geo.Location.Latitude}\n" +
+                                            $"Message: {geo.Message}";
+
+                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
+
+                        pinGeo.MouseDown += (s, a) =>
+                        {
+                            SelectGeoPin(pinGeo, geo);
+
+                            // Prevent click from being triggered on map.
+                            a.Handled = true;
+                        };
+                    });
+                });
+            }
         }
 
         private void UpdateMap()
@@ -348,7 +355,16 @@ namespace Geocaching
             }
 
             string path = dialog.FileName;
-            await LoadDatabase.FromFlatFile(path);
+            try
+            {
+                await LoadDatabase.FromFlatFile(path);
+
+                LoadMapDataFromDatabase();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load file. \n\n" + ex.ToString());
+            }
         }
 
         private async void OnSaveToFileClick(object sender, RoutedEventArgs args)

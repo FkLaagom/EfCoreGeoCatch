@@ -26,7 +26,7 @@ namespace Geocaching.Database
 
         public static async Task FromFlatFile(string path)
         {
-            var emptyDatabase =  EmptyDatabaseAsync();
+            var emptyDatabase = EmptyDatabaseAsync();
 
             var lines = File.ReadAllLines(path);
             LineToPersson(lines[0]);
@@ -54,7 +54,7 @@ namespace Geocaching.Database
                     var foundGeocashe = new FoundGeocache
                     {
                         Person = _persons[i],
-                        Geocashe = _geocashes[id-1]
+                        Geocashe = _geocashes[id - 1]
                     };
                     _foundGeocashes.Add(foundGeocashe);
                 }
@@ -107,14 +107,14 @@ namespace Geocaching.Database
 
         private static void LineToFoundGeocache(string line)
         {
-            var ids = line.Substring(6).Split(',').Select(x => x.Trim()).ToArray();
+            var ids = line.Substring(6).Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToArray();
             var foundIds = new List<int>();
             var person = _persons.LastOrDefault();
-            foreach (var id in ids)
+            foreach (var id in ids.Where(m => !string.IsNullOrEmpty(m)))
             {
                 foundIds.Add(int.Parse(id));
             }
-             _foundGeocacheIDs.Add(new KeyValuePair<Person,List<int>>(person,foundIds));
+            _foundGeocacheIDs.Add(new KeyValuePair<Person, List<int>>(person, foundIds));
         }
 
         private static void LineToPersson(string line)
