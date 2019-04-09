@@ -29,7 +29,6 @@ namespace Geocaching
         // Contains the ID string needed to use the Bing map.
         // Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
         private readonly string applicationId = "AlkAgPVerBBqzh_R2hMjn3aFu4ymqxo2PObuhkEwN-hZDA5VcjGgsTa8aVK8gnSV";
-
         private MapLayer layer;
         private Person SelectedPerson;
 
@@ -112,24 +111,26 @@ namespace Geocaching
 
         private async void SelectGeoPin(Pushpin pin, Geocashe geo)
         {
-            if (SelectedPerson.Geocashes.Contains(geo))
-            {
+            if(SelectedPerson == null)
                 return;
-            }
+            if (SelectedPerson.Geocashes.Contains(geo))
+                return;
             
             if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
             {
                FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
                SelectedPerson.FoundGeocaches.Remove(found);
                pin.Background = new SolidColorBrush(Colors.Red);
-               await RemoveFoundGeoCacheAsync(found); 
+                var crud = new Crud<FoundGeocache>();
+                await crud.DeleteAsync(found);
             }
             
             else
             {
                 pin.Background = new SolidColorBrush(Colors.Green);
                 SelectedPerson.FoundGeocaches.Add(new FoundGeocache { Geocashe = geo, GeocasheID = geo.ID, Person = SelectedPerson, PersonID = SelectedPerson.ID });
-                await AddFoundGeoCacheAsync(new FoundGeocache { GeocasheID = geo.ID, PersonID = SelectedPerson.ID });
+                var crud = new Crud<FoundGeocache>();
+                await crud.CreateAsync(new FoundGeocache { GeocasheID = geo.ID, PersonID = SelectedPerson.ID });
             }
         }
 
@@ -145,7 +146,6 @@ namespace Geocaching
 
             if (SelectedPerson == null)
             {
-                MessageBox.Show("Select a person!");
                 return;
             }
 
@@ -154,16 +154,14 @@ namespace Geocaching
                 Location = latestClickLocation,
                 Content = dialog.GeocacheContents,
                 Message = dialog.GeocacheMessage,
+                PersonId = SelectedPerson.ID
             };
+            
+            var x = new Crud<Geocashe>();
+            await x.CreateAsync(geocache);
+            SelectedPerson.Geocashes.Add(geocache);
 
-            using (var context = new AppDbContext())
-            {
-                geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
-                context.Geocashes.Add(geocache);
-                await context.SaveChangesAsync();
-            }
-
-            var pin = AddPin(latestClickLocation, geocache.Message, Colors.Gray, geocache);
+            var pin = AddPin(latestClickLocation, PinGeoInfo(SelectedPerson, geocache), Colors.Black, geocache);
 
             pin.MouseDown += (s, a) =>
             {
@@ -171,6 +169,8 @@ namespace Geocaching
 
                 a.Handled = true;
             };
+
+            await LoadMapDataFromDatabase();
         }
 
         private async void OnAddPersonClick(object sender, RoutedEventArgs args)
@@ -197,8 +197,8 @@ namespace Geocaching
             var pin = AddPersonPin(person);
 
             SelectPersonPin(pin, person);
-
-            await AddPersonAsync(person);
+            var crud = new Crud<Person>();
+            await crud.CreateAsync(person);
         }
 
         private async void OnLoadFromFileClick(object sender, RoutedEventArgs args)
@@ -216,7 +216,7 @@ namespace Geocaching
             try
             {
                 await LoadDatabase.FromFlatFile(path);
-            await LoadMapDataFromDatabase();
+                await LoadMapDataFromDatabase();
             }
             catch (Exception ex)
             {
@@ -259,7 +259,9 @@ namespace Geocaching
                         {
                             otherPin.Opacity = 0.5;
                         }
+
                     }
+
                     else if (otherPin.Tag is Geocashe)
                     {
                         var geo = (Geocashe)((Pushpin)otherPin).Tag;
@@ -283,71 +285,42 @@ namespace Geocaching
 
         private async Task LoadMapDataFromDatabase()
         {
+           layer.Children.Clear();
+           var crud = new Crud<Person>();
+           var persons = await crud.GetListAsync(true);
 
-            //await Task.Delay(10000);
-            layer.Children.Clear();
-
-            using (var db = new AppDbContext())
+            // Load data from database and populate map here.
+            persons.ForEach(person =>
             {
-                var persons = await db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
+                AddPersonPin(person);
 
-                // Load data from database and populate map here.
-                persons.ForEach(person =>
+                person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
                 {
-                    
-                    AddPersonPin(person);
 
-                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
+                    string pinGeoInfo = PinGeoInfo(person, geo);
+
+                    var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
+
+                    pinGeo.MouseDown += (s, a) =>
                     {
-                        
-                        string pinGeoInfo = $"Geo cache\n" +
-                                            $"Added by {person.FirstName } {person.LastName}\n" +
-                                            $"Longitude: {geo.Location.Longitude}\n" +
-                                            $"Latitude: {geo.Location.Latitude}\n" +
-                                            $"Message: {geo.Message}";
+                        SelectGeoPin(pinGeo, geo);
 
-                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
-
-                        pinGeo.MouseDown += (s, a) =>
-                        {
-                            SelectGeoPin(pinGeo, geo);
-
-                            // Prevent click from being triggered on map.
-                            a.Handled = true;
-                        };
-                    });
+                        // Prevent click from being triggered on map.
+                        a.Handled = true;
+                    };
                 });
-            }
+            });
+            
         }
 
-        private static async Task AddPersonAsync(Person person)
+        private static string PinGeoInfo(Person person, Geocashe geocashe)
         {
-            using (var context = new AppDbContext())
-            {
-                context.Persons.Add(person);
-
-                await context.SaveChangesAsync();
-            }
-        }
-
-        private static async Task AddFoundGeoCacheAsync(FoundGeocache geo)
-        {
-            using (var context = new AppDbContext())
-            {
-                context.FoundGeocaches.Add(geo);
-
-                await context.SaveChangesAsync();
-            }
-        }
-
-        private static async Task RemoveFoundGeoCacheAsync(FoundGeocache geo)
-        {
-            using (var context = new AppDbContext())
-            {
-                context.FoundGeocaches.Remove(geo);
-
-                await context.SaveChangesAsync();
-            }
+            return $"Geo cache\n" +
+                   $"Added by {person.FirstName } {person.LastName}\n" +
+                   $"Longitude: {geocashe.Location.Longitude}\n" +
+                   $"Latitude: {geocashe.Location.Latitude}\n" +
+                   $"Message: {geocashe.Message}\n" +
+                   $"Content: {geocashe.Content}";
         }
 
         private Pushpin AddPersonPin(Person person)
@@ -359,7 +332,6 @@ namespace Geocaching
             pin.MouseDown += (s, a) =>
             {
                 SelectPersonPin(pin, person);
-
                 // Prevent click from being triggered on map.
                 a.Handled = true;
             };

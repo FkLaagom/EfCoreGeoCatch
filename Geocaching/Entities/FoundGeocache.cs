@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Geocaching.Models
 {
-    public class FoundGeocache
+    public class FoundGeocache : IEntity
     {
         public int PersonID { get; set; }
         public Person Person { get; set; }

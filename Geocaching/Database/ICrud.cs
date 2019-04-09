@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Geocaching.Database
 {
-    interface ICrud
+    public interface ICrud<T>
     {
-        string ConnectionString { get; set; }
-        Task AddPersonAsync(Person person);
-        Task AddFoundGeoCacheAsync(FoundGeocache geo);
-        Task AddGeoCasheAsync(Geocashe geo);
-        Task RemoveFoundGeoCacheAsync(FoundGeocache geo);
+            Task CreateAsync(T entity);
+            Task DeleteAsync(T entity);
+            Task<List<T>> GetListAsync(bool eager);
+            Task SaveChangesAsync();
     }
 }

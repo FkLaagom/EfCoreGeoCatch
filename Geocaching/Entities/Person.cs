@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Geocaching.Models
 {
-    public class Person
+    public class Person : IEntity
     {
         [Key]
         public int ID { get; set; }

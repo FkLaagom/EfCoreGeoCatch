@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Geocaching.Models
 {
-    public class Geocashe
+    public class Geocashe : IEntity
     {
         [Key]
         public int ID { get; set; }
@@ -20,6 +20,7 @@ namespace Geocaching.Models
         [MaxLength(255)]
         [Required]
         public string Message { get; set; }
+        public int PersonId { get; set; }
         public Person Person { get; set; }
     }
 }

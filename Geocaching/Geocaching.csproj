@@ -241,6 +241,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Database\Crud.cs" />
     <Compile Include="Database\ICrud.cs" />
     <Compile Include="Database\LoadDatabase.cs" />
     <Compile Include="Database\SaveDatabase.cs" />
@@ -344,6 +345,10 @@
     <Compile Include="Migrations\20190409124046_nulltest.designer.cs">
       <DependentUpon>20190409124046_nulltest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190409190255_TestID.cs" />
+    <Compile Include="Migrations\20190409190255_TestID.designer.cs">
+      <DependentUpon>20190409190255_TestID.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Database\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">
@@ -359,9 +364,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\FoundGeocache.cs" />
-    <Compile Include="Models\Geocashe.cs" />
-    <Compile Include="Models\Person.cs" />
+    <Compile Include="Entities\FoundGeocache.cs" />
+    <Compile Include="Entities\Geocashe.cs" />
+    <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Person.cs" />
     <Compile Include="PersonDialog.xaml.cs">
       <DependentUpon>PersonDialog.xaml</DependentUpon>
     </Compile>

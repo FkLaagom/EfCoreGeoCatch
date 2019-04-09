@@ -76,6 +76,7 @@ namespace Geocaching.Database
         {
             using (var context = new AppDbContext())
             {
+
                 context.Persons.AddRange(_persons);
                 context.Geocashes.AddRange(_geocashes);
                 context.FoundGeocaches.AddRange(_foundGeocashes);
