@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using Geocaching.Models;
 using Microsoft.EntityFrameworkCore;
 using Geocaching.Database;
+using System.Threading;
 
 namespace Geocaching
 {
@@ -52,7 +53,7 @@ namespace Geocaching
             Start();
         }
 
-        private void Start()
+        private async void Start()
         {
             System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
 
@@ -65,6 +66,10 @@ namespace Geocaching
             CreateMap();
 
             LoadMapDataFromDatabase();
+            await LoadMapDataFromDatabase();
+
+            //Task load = LoadMapDataFromDatabase();
+            //Task load2 = new Task(() => LoadMapDataFromDatabase());
         }
 
         private void CreateMap()
@@ -97,16 +102,18 @@ namespace Geocaching
             addGeocacheMenuItem.Click += OnAddGeocacheClick;
         }
 
-        private void LoadMapDataFromDatabase()
+        private async Task LoadMapDataFromDatabase()
         {
+
+            //await Task.Delay(10000);
             layer.Children.Clear();
 
             using (var db = new AppDbContext())
             {
-                var p = db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToList();
+                var persons = await db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
 
                 // Load data from database and populate map here.
-                p.ForEach(person =>
+                persons.ForEach(person =>
                 {
                     AddPersonPin(person);
 
@@ -161,7 +168,7 @@ namespace Geocaching
 
             UpdateMap();
         }
-#warning MakeAsync
+
         private async void OnAddGeocacheClick(object sender, RoutedEventArgs args)
         {
             var dialog = new GeocacheDialog();
@@ -185,8 +192,6 @@ namespace Geocaching
                 Message = dialog.GeocacheMessage,
             };
 
-            //var t = Task.Run(() => AddGeocasheAsync(geocache));
-
             using (var context = new AppDbContext())
             {
                 geocache.Person = context.Persons.FirstOrDefault(x => x == SelectedPerson);
@@ -194,14 +199,12 @@ namespace Geocaching
                 await context.SaveChangesAsync();
             }
 
-            // Add geocache to map and database here.
             var pin = AddPin(latestClickLocation, geocache.Message, Colors.Gray, geocache);
 
             pin.MouseDown += (s, a) =>
             {
                 SelectGeoPin(pin, geocache);
 
-                // Prevent click from being triggered on map.
                 a.Handled = true;
             };
         }
@@ -224,7 +227,7 @@ namespace Geocaching
             return pin;
         }
 
-        private void SelectGeoPin(Pushpin pin, Geocashe geo)
+        private async void SelectGeoPin(Pushpin pin, Geocashe geo)
         {
             // Handle click on geocache pin here.
             if (SelectedPerson == null)
@@ -233,25 +236,29 @@ namespace Geocaching
             }
             else
             {
-                var found = SelectedPerson.FoundGeocaches.SingleOrDefault(f => f.Geocashe == geo);
+                FoundGeocache found = SelectedPerson.FoundGeocaches.SingleOrDefault(f => f.Geocashe == geo);
 
-                if (found != null)
+                if (SelectedPerson.Geocashes.Contains(geo))
+                {
+                    return;
+                }
+                else if (found != null)
                 {
                     SelectedPerson.FoundGeocaches.Remove(found);
 
                     pin.Background = new SolidColorBrush(Colors.Red);
 
-                    //AddFoundGeoCacheAsync(found);
+                    await RemoveFoundGeoCacheAsync(found);
                 }
                 else
                 {
-                    var newFound = new FoundGeocache() { PersonID = SelectedPerson.ID, Person = SelectedPerson, Geocashe = geo, GeocasheID = geo.ID };
+                    var newFound = new FoundGeocache {PersonID= SelectedPerson.ID, GeocasheID = geo.ID};
 
                     SelectedPerson.FoundGeocaches.Add(newFound);
 
                     pin.Background = new SolidColorBrush(Colors.Green);
 
-                    //RemoveFoundGeoCacheAsync(newFound);
+                    await AddFoundGeoCacheAsync(newFound);
                 }
 
                 UpdateMap();
@@ -301,8 +308,7 @@ namespace Geocaching
             UpdateMap();
         }
 
-#warning MakeAsync
-        private void OnAddPersonClick(object sender, RoutedEventArgs args)
+        private async void OnAddPersonClick(object sender, RoutedEventArgs args)
         {
             var dialog = new PersonDialog();
             dialog.Owner = this;
@@ -327,7 +333,7 @@ namespace Geocaching
 
             SelectPersonPin(pin, person);
 
-            AddPersonAsync(person);
+            await AddPersonAsync(person);
         }
 
         private Pushpin AddPin(Location location, string tooltip, Color color, object tag)
@@ -383,7 +389,7 @@ namespace Geocaching
             await SaveDatabase.ToFlatFile(path);
         }
 
-        private static async void AddPersonAsync(Person person)
+        private static async Task AddPersonAsync(Person person)
         {
             using (var context = new AppDbContext())
             {
@@ -393,7 +399,7 @@ namespace Geocaching
             }
         }
 
-        private static async void AddFoundGeoCacheAsync(FoundGeocache geo)
+        private static async Task AddFoundGeoCacheAsync(FoundGeocache geo)
         {
             using (var context = new AppDbContext())
             {
@@ -403,7 +409,7 @@ namespace Geocaching
             }
         }
 
-        private static async void RemoveFoundGeoCacheAsync(FoundGeocache geo)
+        private static async Task RemoveFoundGeoCacheAsync(FoundGeocache geo)
         {
             using (var context = new AppDbContext())
             {
@@ -412,14 +418,5 @@ namespace Geocaching
                 await context.SaveChangesAsync();
             }
         }
-
-        //private static async Task AddGeocasheAsync(Geocashe geocasche)
-        //{
-        //    using (var context = new AppDbContext())
-        //    {
-        //        context.Geocashes.Add(geocasche);
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
     }
 }
