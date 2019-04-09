@@ -128,12 +128,6 @@ namespace Geocaching
             }
         }
 
-        private void UpdateMap()
-        {
-            // It is recommended (but optional) to use this method for setting the color and opacity of each pin after every user interaction that might change something.
-            // This method should then be called once after every significant action, such as clicking on a pin, clicking on the map, or clicking a context menu option.
-        }
-
         private void OnMapLeftClick()
         {
             // Handle map click here.
@@ -155,7 +149,6 @@ namespace Geocaching
                 }
             }
 
-            UpdateMap();
         }
 
         private async void OnAddGeocacheClick(object sender, RoutedEventArgs args)
@@ -250,7 +243,6 @@ namespace Geocaching
                     await AddFoundGeoCacheAsync(newFound);
                 }
 
-                UpdateMap();
             }
         }
 
@@ -293,8 +285,6 @@ namespace Geocaching
                     }
                 }
             }
-
-            UpdateMap();
         }
 
         private async void OnAddPersonClick(object sender, RoutedEventArgs args)
