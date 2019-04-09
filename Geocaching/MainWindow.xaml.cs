@@ -56,6 +56,7 @@ namespace Geocaching
             }
 
             CreateMap();
+
             await LoadMapDataFromDatabase();
         }
 
@@ -193,7 +194,6 @@ namespace Geocaching
 
             var pin = AddPin(person.Location, pinInfo, Colors.Blue, person);
 
-            //när vi klickar på en  person så ska pin ändra färg till halv grå?
             pin.MouseDown += (s, a) =>
             {
                 SelectPersonPin(pin, person);
