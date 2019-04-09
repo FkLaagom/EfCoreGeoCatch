@@ -241,6 +241,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Database\ICrud.cs" />
     <Compile Include="Database\LoadDatabase.cs" />
     <Compile Include="Database\SaveDatabase.cs" />
     <Compile Include="Migrations\20190319122828_First.cs" />

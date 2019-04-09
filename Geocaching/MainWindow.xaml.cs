@@ -56,8 +56,6 @@ namespace Geocaching
             }
 
             CreateMap();
-
-            LoadMapDataFromDatabase();
             await LoadMapDataFromDatabase();
         }
 
@@ -130,8 +128,6 @@ namespace Geocaching
 
         private void OnMapLeftClick()
         {
-            // Handle map click here.
-
             SelectedPerson = null;
 
             foreach (UIElement element in layer.Children)
@@ -211,38 +207,24 @@ namespace Geocaching
 
         private async void SelectGeoPin(Pushpin pin, Geocashe geo)
         {
-            // Handle click on geocache pin here.
-            if (SelectedPerson == null)
+            if (SelectedPerson.Geocashes.Contains(geo))
             {
-                MessageBox.Show("Select a person first");
+                return;
             }
+            
+            if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
+            {
+               FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
+               SelectedPerson.FoundGeocaches.Remove(found);
+               pin.Background = new SolidColorBrush(Colors.Red);
+               await RemoveFoundGeoCacheAsync(found); 
+            }
+            
             else
             {
-                FoundGeocache found = SelectedPerson.FoundGeocaches.SingleOrDefault(f => f.Geocashe == geo);
-
-                if (SelectedPerson.Geocashes.Contains(geo))
-                {
-                    return;
-                }
-                else if (found != null)
-                {
-                    SelectedPerson.FoundGeocaches.Remove(found);
-
-                    pin.Background = new SolidColorBrush(Colors.Red);
-
-                    await RemoveFoundGeoCacheAsync(found);
-                }
-                else
-                {
-                    var newFound = new FoundGeocache {PersonID= SelectedPerson.ID, GeocasheID = geo.ID};
-
-                    SelectedPerson.FoundGeocaches.Add(newFound);
-
-                    pin.Background = new SolidColorBrush(Colors.Green);
-
-                    await AddFoundGeoCacheAsync(newFound);
-                }
-
+                pin.Background = new SolidColorBrush(Colors.Green);
+                SelectedPerson.FoundGeocaches.Add(new FoundGeocache { Geocashe = geo, GeocasheID = geo.ID, Person = SelectedPerson, PersonID = SelectedPerson.ID });
+                await AddFoundGeoCacheAsync(new FoundGeocache { GeocasheID = geo.ID, PersonID = SelectedPerson.ID });
             }
         }
 
