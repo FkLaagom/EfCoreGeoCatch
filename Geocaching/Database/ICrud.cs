@@ -11,7 +11,7 @@ namespace Geocaching.Database
     {
             Task CreateAsync(T entity);
             Task DeleteAsync(T entity);
-            Task<List<T>> GetListAsync(bool eager);
+            Task<List<T>> GetListAsync(bool eagerLoad = false);
             Task SaveChangesAsync();
     }
 }

@@ -18,10 +18,10 @@ namespace Geocaching.Database
             await SaveChangesAsync();
         }
 
-        public async Task<List<T>> GetListAsync(bool eager = false)
+        public async Task<List<T>> GetListAsync(bool eagerLoad = false)
         {
             var query = _context.Set<T>().AsQueryable();
-            if (eager)
+            if (eagerLoad)
             {
                 foreach (var property in _context.Model.FindEntityType(typeof(T)).GetNavigations())
                     query = query.Include(property.Name);
