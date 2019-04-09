@@ -36,7 +36,6 @@ namespace Geocaching
         // Contains the location of the latest click on the map.
         // The Location object in turn contains information like longitude and latitude.
         private Location latestClickLocation;
-
         private Location gothenburg = new Location(57.719021, 11.991202);
 
         public MainWindow()
@@ -90,43 +89,6 @@ namespace Geocaching
             addGeocacheMenuItem.Click += OnAddGeocacheClick;
         }
 
-        private async Task LoadMapDataFromDatabase()
-        {
-
-            //await Task.Delay(10000);
-            layer.Children.Clear();
-
-            using (var db = new AppDbContext())
-            {
-                var persons = await db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
-
-                // Load data from database and populate map here.
-                persons.ForEach(person =>
-                {
-                    AddPersonPin(person);
-
-                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
-                    {
-                        string pinGeoInfo = $"Geo cache\n" +
-                                            $"Added by {person.FirstName } {person.LastName}\n" +
-                                            $"Longitude: {geo.Location.Longitude}\n" +
-                                            $"Latitude: {geo.Location.Latitude}\n" +
-                                            $"Message: {geo.Message}";
-
-                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
-
-                        pinGeo.MouseDown += (s, a) =>
-                        {
-                            SelectGeoPin(pinGeo, geo);
-
-                            // Prevent click from being triggered on map.
-                            a.Handled = true;
-                        };
-                    });
-                });
-            }
-        }
-
         private void OnMapLeftClick()
         {
             SelectedPerson = null;
@@ -146,6 +108,29 @@ namespace Geocaching
                 }
             }
 
+        }
+
+        private async void SelectGeoPin(Pushpin pin, Geocashe geo)
+        {
+            if (SelectedPerson.Geocashes.Contains(geo))
+            {
+                return;
+            }
+            
+            if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
+            {
+               FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
+               SelectedPerson.FoundGeocaches.Remove(found);
+               pin.Background = new SolidColorBrush(Colors.Red);
+               await RemoveFoundGeoCacheAsync(found); 
+            }
+            
+            else
+            {
+                pin.Background = new SolidColorBrush(Colors.Green);
+                SelectedPerson.FoundGeocaches.Add(new FoundGeocache { Geocashe = geo, GeocasheID = geo.ID, Person = SelectedPerson, PersonID = SelectedPerson.ID });
+                await AddFoundGeoCacheAsync(new FoundGeocache { GeocasheID = geo.ID, PersonID = SelectedPerson.ID });
+            }
         }
 
         private async void OnAddGeocacheClick(object sender, RoutedEventArgs args)
@@ -188,44 +173,71 @@ namespace Geocaching
             };
         }
 
-        private Pushpin AddPersonPin(Person person)
+        private async void OnAddPersonClick(object sender, RoutedEventArgs args)
         {
-            string pinInfo = $"{person.FirstName} {person.LastName}\n{person.StreetName} {person.StreetNumber}";
-
-            var pin = AddPin(person.Location, pinInfo, Colors.Blue, person);
-
-            pin.MouseDown += (s, a) =>
-            {
-                SelectPersonPin(pin, person);
-
-                // Prevent click from being triggered on map.
-                a.Handled = true;
-            };
-
-            return pin;
-        }
-
-        private async void SelectGeoPin(Pushpin pin, Geocashe geo)
-        {
-            if (SelectedPerson.Geocashes.Contains(geo))
+            var dialog = new PersonDialog();
+            dialog.Owner = this;
+            dialog.ShowDialog();
+            if (dialog.DialogResult == false)
             {
                 return;
             }
-            
-            if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
+
+            var person = new Person
             {
-               FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
-               SelectedPerson.FoundGeocaches.Remove(found);
-               pin.Background = new SolidColorBrush(Colors.Red);
-               await RemoveFoundGeoCacheAsync(found); 
-            }
-            
-            else
+                FirstName = dialog.PersonFirstName,
+                LastName = dialog.PersonLastName,
+                Location = new Location(latestClickLocation.Latitude, latestClickLocation.Longitude),
+                Country = dialog.AddressCountry,
+                City = dialog.AddressCity,
+                StreetName = dialog.AddressStreetName,
+                StreetNumber = dialog.AddressStreetNumber
+            };
+
+            var pin = AddPersonPin(person);
+
+            SelectPersonPin(pin, person);
+
+            await AddPersonAsync(person);
+        }
+
+        private async void OnLoadFromFileClick(object sender, RoutedEventArgs args)
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents (.txt)|*.txt";
+            bool? result = dialog.ShowDialog();
+            if (result != true)
             {
-                pin.Background = new SolidColorBrush(Colors.Green);
-                SelectedPerson.FoundGeocaches.Add(new FoundGeocache { Geocashe = geo, GeocasheID = geo.ID, Person = SelectedPerson, PersonID = SelectedPerson.ID });
-                await AddFoundGeoCacheAsync(new FoundGeocache { GeocasheID = geo.ID, PersonID = SelectedPerson.ID });
+                return;
             }
+
+            string path = dialog.FileName;
+            try
+            {
+                await LoadDatabase.FromFlatFile(path);
+            await LoadMapDataFromDatabase();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load file. \n\n" + ex.ToString());
+            }
+        }
+
+        private async void OnSaveToFileClick(object sender, RoutedEventArgs args)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog();
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents (.txt)|*.txt";
+            dialog.FileName = "Geocaches";
+            bool? result = dialog.ShowDialog();
+            if (result != true)
+            {
+                return;
+            }
+
+            string path = dialog.FileName;
+            await SaveDatabase.ToFlatFile(path);
         }
 
         private void SelectPersonPin(Pushpin pin, Person person)
@@ -269,84 +281,43 @@ namespace Geocaching
             }
         }
 
-        private async void OnAddPersonClick(object sender, RoutedEventArgs args)
+        private async Task LoadMapDataFromDatabase()
         {
-            var dialog = new PersonDialog();
-            dialog.Owner = this;
-            dialog.ShowDialog();
-            if (dialog.DialogResult == false)
+
+            //await Task.Delay(10000);
+            layer.Children.Clear();
+
+            using (var db = new AppDbContext())
             {
-                return;
+                var persons = await db.Persons.Include(x => x.Geocashes).Include(x => x.FoundGeocaches).ToListAsync();
+
+                // Load data from database and populate map here.
+                persons.ForEach(person =>
+                {
+                    
+                    AddPersonPin(person);
+
+                    person.Geocashes.ToAsyncEnumerable().ForEachAsync(geo =>
+                    {
+                        
+                        string pinGeoInfo = $"Geo cache\n" +
+                                            $"Added by {person.FirstName } {person.LastName}\n" +
+                                            $"Longitude: {geo.Location.Longitude}\n" +
+                                            $"Latitude: {geo.Location.Latitude}\n" +
+                                            $"Message: {geo.Message}";
+
+                        var pinGeo = AddPin(geo.Location, pinGeoInfo, Colors.Gray, geo);
+
+                        pinGeo.MouseDown += (s, a) =>
+                        {
+                            SelectGeoPin(pinGeo, geo);
+
+                            // Prevent click from being triggered on map.
+                            a.Handled = true;
+                        };
+                    });
+                });
             }
-
-            var person = new Person
-            {
-                FirstName = dialog.PersonFirstName,
-                LastName = dialog.PersonLastName,
-                Location = new Location(latestClickLocation.Latitude, latestClickLocation.Longitude),
-                Country = dialog.AddressCountry,
-                City = dialog.AddressCity,
-                StreetName = dialog.AddressStreetName,
-                StreetNumber = dialog.AddressStreetNumber
-            };
-
-            var pin = AddPersonPin(person);
-
-            SelectPersonPin(pin, person);
-
-            await AddPersonAsync(person);
-        }
-
-        private Pushpin AddPin(Location location, string tooltip, Color color, object tag)
-        {
-            var pin = new Pushpin();
-            pin.Tag = tag;
-            pin.Cursor = Cursors.Hand;
-            pin.Background = new SolidColorBrush(color);
-            ToolTipService.SetToolTip(pin, tooltip);
-            ToolTipService.SetInitialShowDelay(pin, 0);
-            layer.AddChild(pin, new Location(location.Latitude, location.Longitude));
-
-            return pin;
-        }
-
-        private async void OnLoadFromFileClick(object sender, RoutedEventArgs args)
-        {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            bool? result = dialog.ShowDialog();
-            if (result != true)
-            {
-                return;
-            }
-
-            string path = dialog.FileName;
-            try
-            {
-                await LoadDatabase.FromFlatFile(path);
-                await LoadMapDataFromDatabase();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to load file. \n\n" + ex.ToString());
-            }
-        }
-
-        private async void OnSaveToFileClick(object sender, RoutedEventArgs args)
-        {
-            var dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents (.txt)|*.txt";
-            dialog.FileName = "Geocaches";
-            bool? result = dialog.ShowDialog();
-            if (result != true)
-            {
-                return;
-            }
-
-            string path = dialog.FileName;
-            await SaveDatabase.ToFlatFile(path);
         }
 
         private static async Task AddPersonAsync(Person person)
@@ -378,5 +349,36 @@ namespace Geocaching
                 await context.SaveChangesAsync();
             }
         }
+
+        private Pushpin AddPersonPin(Person person)
+        {
+            string pinInfo = $"{person.FirstName} {person.LastName}\n{person.StreetName} {person.StreetNumber}";
+
+            var pin = AddPin(person.Location, pinInfo, Colors.Blue, person);
+
+            pin.MouseDown += (s, a) =>
+            {
+                SelectPersonPin(pin, person);
+
+                // Prevent click from being triggered on map.
+                a.Handled = true;
+            };
+
+            return pin;
+        }
+
+        private Pushpin AddPin(Location location, string tooltip, Color color, object tag)
+        {
+            var pin = new Pushpin();
+            pin.Tag = tag;
+            pin.Cursor = Cursors.Hand;
+            pin.Background = new SolidColorBrush(color);
+            ToolTipService.SetToolTip(pin, tooltip);
+            ToolTipService.SetInitialShowDelay(pin, 0);
+            layer.AddChild(pin, new Location(location.Latitude, location.Longitude));
+
+            return pin;
+        }
     }
+
 }

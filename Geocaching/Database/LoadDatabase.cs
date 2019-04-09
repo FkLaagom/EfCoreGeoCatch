@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Geocaching.Database
 {
-    public static class LoadDatabase
+    public  static class LoadDatabase
     {
         private static List<Person> _persons;
         private static List<Geocashe> _geocashes;
@@ -27,6 +27,11 @@ namespace Geocaching.Database
         public static async Task FromFlatFile(string path)
         {
             var emptyDatabase = EmptyDatabaseAsync();
+
+            _persons.Clear();
+            _geocashes.Clear();
+            _foundGeocashes.Clear();
+            _foundGeocacheIDs.Clear();
 
             var lines = File.ReadAllLines(path);
             LineToPersson(lines[0]);

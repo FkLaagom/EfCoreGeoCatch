@@ -345,7 +345,7 @@
       <DependentUpon>20190409124046_nulltest.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
-    <Compile Include="Models\AppDbContext.cs" />
+    <Compile Include="Database\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">
       <DependentUpon>GeocacheDialog.xaml</DependentUpon>
     </Compile>
