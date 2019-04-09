@@ -57,7 +57,6 @@ namespace Geocaching
 
             CreateMap();
 
-            LoadMapDataFromDatabase();
             await LoadMapDataFromDatabase();
         }
 
