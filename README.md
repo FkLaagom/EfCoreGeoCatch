@@ -1,5 +1,5 @@
 # GeoCatch
-Small school project for practicing EF-Core Code First Aproach.
+Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs asynchronous.
 
 ![Alt Text](https://github.com/FkLaagom/GeoCatch/blob/master/MD/Example.png)
 
