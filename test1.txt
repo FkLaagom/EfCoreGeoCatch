@@ -1,0 +1,55 @@
+Jakob | Kallin | Sweden | Göteborg | Anders Personsgatan | 17 | 57.709917 | 11.994034
+1 | 57.692847 | 12.058648 | Jakob's first geocache contents | Jakob's first geocache message
+2 | 57.704374 | 11.989266 | Jakob's second geocache contents | Jakob's second geocache message
+3 | 57.698727 | 11.957695 | Jakob's third geocache contents | Jakob's third geocache message
+Found: 4, 6
+
+Brad | Pitt | Sweden | Göteborg | Drottningatan | 18 | 57.705178 | 11.965377
+4 | 57.712394 | 12.005746 | Brad's first geocache contents | Brad's first geocache message
+5 | 57.706712 | 11.97622 | Brad's second geocache contents | Brad's second geocache message
+Found: 1, 3, 6
+
+Angelina | Jolie | Sweden | Göteborg | Engelbrektsgatan | 27 | 57.698589 | 11.977179
+6 | 57.697913 | 11.969342 | Angelina's first geocache contents | Angelina's first geocache message
+Found: 2, 5
+
+test1 | asdas | asdasd | asdads | asdasd | 111 | 57.7585132939105 | 12.0481935771484
+Found: 
+
+fisr | sgsdf | asfasf | asfasf | afsasf | 123 | 57.7374438860013 | 12.0221010478515
+7 | 57.7150785674395 | 12.0344606669921 | sdg | TEstnågot
+Found: 
+
+asdads | adsads | sadads | sad | asd | 111 | 57.7418419937205 | 12.0406404765625
+Found: 
+
+asasd | asas | sadsad | adss | assad | 11 | 57.7247963467398 | 12.0457903178711
+Found: 
+
+asads | asas | asdads | saas | sadads | 111 | 57.7183792379138 | 12.071539524414
+Found: 
+
+gatai | jansson | sverige | göteborg | 42447 | 23 | 57.7381769410977 | 11.9431368144531
+8 | 57.7427581988416 | 11.9630495341797 | Find me | testar bara detta
+9 | 57.7389099813365 | 11.9572130473633 | dfg | dgfh
+Found: 
+
+testhjk | hnab dfj | dgs | dfg | dfgh | 2 | 57.7594290766087 | 11.9736925395508
+10 | 57.760711133399 | 11.9551531108398 | esrdftgh | wesdrfg
+Found: 
+
+dxfdgch | asdfg | ghjk | bjnlkmö, | bhjnkml, | 2 | 57.7478885185522 | 11.9160143168945
+11 | 57.7636413781239 | 11.9167009624023 | wesrdtfgy | vhbjkmlö
+Found: 
+
+dgfg | gvbhnj | bhnjmk | gbhnj | gvbhnj | 2 | 57.7517357806468 | 12.0667330058594
+12 | 57.7667545027839 | 12.0746294291992 | erdtfg | rftg
+Found: 
+
+sdfgh | hbnjl | bhklm | bhnk | jbhjn | 3 | 57.7378104154067 | 12.1271578105469
+13 | 57.7464227871989 | 12.1147981914062 | dfg | hbnjmk
+Found: 
+
+rfygh | ghbj | hnj | nj | m | 1 | 57.7323120843009 | 11.888548496582
+14 | 57.734511517037 | 11.9009081157226 | gh | gh
+Found: 

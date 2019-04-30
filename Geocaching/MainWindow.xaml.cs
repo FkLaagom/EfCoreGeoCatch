@@ -18,6 +18,7 @@ using Geocaching.Models;
 using Microsoft.EntityFrameworkCore;
 using Geocaching.Database;
 using System.Threading;
+using System.Globalization;
 
 namespace Geocaching
 {
@@ -45,7 +46,10 @@ namespace Geocaching
 
         private async void Start()
         {
-            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
+
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
 
             if (applicationId == null)
             {
@@ -111,20 +115,20 @@ namespace Geocaching
 
         private async void SelectGeoPin(Pushpin pin, Geocashe geo)
         {
-            if(SelectedPerson == null)
+            if (SelectedPerson == null)
                 return;
             if (SelectedPerson.Geocashes.Contains(geo))
                 return;
-            
+
             if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
             {
-               FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
-               SelectedPerson.FoundGeocaches.Remove(found);
-               pin.Background = new SolidColorBrush(Colors.Red);
+                FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
+                SelectedPerson.FoundGeocaches.Remove(found);
+                pin.Background = new SolidColorBrush(Colors.Red);
                 var crud = new Crud<FoundGeocache>();
                 await crud.DeleteAsync(found);
             }
-            
+
             else
             {
                 pin.Background = new SolidColorBrush(Colors.Green);
@@ -156,10 +160,11 @@ namespace Geocaching
                 Message = dialog.GeocacheMessage,
                 PersonId = SelectedPerson.ID
             };
-            
+
             var x = new Crud<Geocashe>();
             await x.CreateAsync(geocache);
             SelectedPerson.Geocashes.Add(geocache);
+
 
             var pin = AddPin(latestClickLocation, PinGeoInfo(SelectedPerson, geocache), Colors.Black, geocache);
 
@@ -191,7 +196,9 @@ namespace Geocaching
                 Country = dialog.AddressCountry,
                 City = dialog.AddressCity,
                 StreetName = dialog.AddressStreetName,
-                StreetNumber = dialog.AddressStreetNumber
+                StreetNumber = dialog.AddressStreetNumber,
+                Geocashes = new List<Geocashe>(),
+                FoundGeocaches = new List<FoundGeocache>()
             };
 
             var pin = AddPersonPin(person);
@@ -285,9 +292,9 @@ namespace Geocaching
 
         private async Task LoadMapDataFromDatabase()
         {
-           layer.Children.Clear();
-           var crud = new Crud<Person>();
-           var persons = await crud.GetListAsync(true);
+            layer.Children.Clear();
+            var crud = new Crud<Person>();
+            var persons = await crud.GetListAsync(true);
 
             // Load data from database and populate map here.
             persons.ForEach(person =>
@@ -310,7 +317,7 @@ namespace Geocaching
                     };
                 });
             });
-            
+
         }
 
         private static string PinGeoInfo(Person person, Geocashe geocashe)
