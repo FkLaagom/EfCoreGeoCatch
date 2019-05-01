@@ -4,10 +4,11 @@ Small school project for practicing EF-Core Code First Aproach. All SQL CRUD ope
 ## Installation 
 Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) & SQL-Connection string inside App.Congig.
 
-Add migration & Update Database.
+Package Manager Console:
 ```sh
-npm > Add-Migration Initial
-npm > Update-Database
+PM> add-migration Initial
+
+PM> PM> Update-Database
 ```
 
 # Layout
