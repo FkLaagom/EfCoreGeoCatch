@@ -10,7 +10,7 @@ PM> add-migration Initial
 
 PM> Update-Database
 ```
-Import [sample database data](SampleDbData.txt) using the GUIs "Load from file"-button
+Import [sample database data](SampleDbData.txt) using the GUIs "Load From File"-button
 
 
 ## Layout
