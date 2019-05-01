@@ -36,6 +36,9 @@ namespace Geocaching
                                     nestedProp.Ignore(p => p.Altitude);
                                     nestedProp.Ignore(p => p.AltitudeReference);
                                 });
+
+            modelBuilder.Entity<Geocashe>().HasOne(x => x.Person).WithMany(x => x.Geocashes).OnDelete(DeleteBehavior.Restrict);
+               
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

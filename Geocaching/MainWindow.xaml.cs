@@ -19,6 +19,7 @@ using Microsoft.EntityFrameworkCore;
 using Geocaching.Database;
 using System.Threading;
 using System.Globalization;
+using System.Configuration;
 
 namespace Geocaching
 {
@@ -29,7 +30,8 @@ namespace Geocaching
     {
         // Contains the ID string needed to use the Bing map.
         // Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
-        private readonly string applicationId = "AlkAgPVerBBqzh_R2hMjn3aFu4ymqxo2PObuhkEwN-hZDA5VcjGgsTa8aVK8gnSV";
+        private readonly string applicationId = ConfigurationManager.ConnectionStrings["BingMaps"].ConnectionString; 
+            
         private MapLayer layer;
         private Person SelectedPerson;
 
@@ -46,11 +48,6 @@ namespace Geocaching
 
         private async void Start()
         {
-
-            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
-
-            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
-
             if (applicationId == null)
             {
                 MessageBox.Show("Please set the applicationId variable before running this program.");
@@ -158,7 +155,7 @@ namespace Geocaching
                 Location = latestClickLocation,
                 Content = dialog.GeocacheContents,
                 Message = dialog.GeocacheMessage,
-                PersonId = SelectedPerson.ID
+                PersonID = SelectedPerson.ID
             };
 
             var x = new Crud<Geocashe>();
