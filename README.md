@@ -1,5 +1,5 @@
 # GeoCatch
-Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs asynchronous.
+Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs async.
  
 ## Installation 
 Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) & SQL-Connection string inside [App.Congig.](Geocaching/App.config)
@@ -10,6 +10,8 @@ PM> add-migration Initial
 
 PM> Update-Database
 ```
+Import [sample database data](SampleDbData.txt) using the GUIs "Load from file"-button
+
 
 ## Layout
 ![Alt Text](https://github.com/FkLaagom/GeoCatch/blob/master/MD/Example.png)
