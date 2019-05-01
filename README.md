@@ -8,7 +8,7 @@ Package Manager Console:
 ```sh
 PM> add-migration Initial
 
-PM> PM> Update-Database
+PM> Update-Database
 ```
 
 # Layout
