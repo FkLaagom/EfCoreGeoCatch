@@ -28,8 +28,6 @@ namespace Geocaching
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Contains the ID string needed to use the Bing map.
-        // Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
         private readonly string applicationId = ConfigurationManager.ConnectionStrings["BingMaps"].ConnectionString; 
             
         private MapLayer layer;
