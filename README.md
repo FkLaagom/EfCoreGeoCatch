@@ -6,8 +6,8 @@ Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-st
 
 Add migration & Update Database.
 ```sh
-npm> Add-Migration Initial
-npm> Update-Database
+npm > Add-Migration Initial
+npm > Update-Database
 ```
 
 # Layout
