@@ -245,115 +245,6 @@
     <Compile Include="Database\ICrud.cs" />
     <Compile Include="Database\LoadDatabase.cs" />
     <Compile Include="Database\SaveDatabase.cs" />
-    <Compile Include="Migrations\20190319122828_First.cs" />
-    <Compile Include="Migrations\20190319122828_First.designer.cs">
-      <DependentUpon>20190319122828_First.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319133612_test2.cs" />
-    <Compile Include="Migrations\20190319133612_test2.designer.cs">
-      <DependentUpon>20190319133612_test2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319134141_test3.cs" />
-    <Compile Include="Migrations\20190319134141_test3.designer.cs">
-      <DependentUpon>20190319134141_test3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319134614_test4.cs" />
-    <Compile Include="Migrations\20190319134614_test4.designer.cs">
-      <DependentUpon>20190319134614_test4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319150208_test6.cs" />
-    <Compile Include="Migrations\20190319150208_test6.designer.cs">
-      <DependentUpon>20190319150208_test6.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319210140_LoadDatabase.cs" />
-    <Compile Include="Migrations\20190319210140_LoadDatabase.designer.cs">
-      <DependentUpon>20190319210140_LoadDatabase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319210546_LoadDatabase2.cs" />
-    <Compile Include="Migrations\20190319210546_LoadDatabase2.designer.cs">
-      <DependentUpon>20190319210546_LoadDatabase2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319214400_fuck.cs" />
-    <Compile Include="Migrations\20190319214400_fuck.designer.cs">
-      <DependentUpon>20190319214400_fuck.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319231646_loadDatabasimus.cs" />
-    <Compile Include="Migrations\20190319231646_loadDatabasimus.designer.cs">
-      <DependentUpon>20190319231646_loadDatabasimus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319232213_Boss.cs" />
-    <Compile Include="Migrations\20190319232213_Boss.designer.cs">
-      <DependentUpon>20190319232213_Boss.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319233830_1337.cs" />
-    <Compile Include="Migrations\20190319233830_1337.designer.cs">
-      <DependentUpon>20190319233830_1337.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190319234935_updateIdNull.cs" />
-    <Compile Include="Migrations\20190319234935_updateIdNull.designer.cs">
-      <DependentUpon>20190319234935_updateIdNull.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190320105103_asd.cs" />
-    <Compile Include="Migrations\20190320105103_asd.designer.cs">
-      <DependentUpon>20190320105103_asd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190320220111_iCollections.cs" />
-    <Compile Include="Migrations\20190320220111_iCollections.designer.cs">
-      <DependentUpon>20190320220111_iCollections.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322044521_LocationTest3.cs" />
-    <Compile Include="Migrations\20190322044521_LocationTest3.designer.cs">
-      <DependentUpon>20190322044521_LocationTest3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322044924_LocationTest4.cs" />
-    <Compile Include="Migrations\20190322044924_LocationTest4.designer.cs">
-      <DependentUpon>20190322044924_LocationTest4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322045231_LocationTest5.cs" />
-    <Compile Include="Migrations\20190322045231_LocationTest5.designer.cs">
-      <DependentUpon>20190322045231_LocationTest5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322045946_LocationTest6.cs" />
-    <Compile Include="Migrations\20190322045946_LocationTest6.designer.cs">
-      <DependentUpon>20190322045946_LocationTest6.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322050216_LocationTest7.cs" />
-    <Compile Include="Migrations\20190322050216_LocationTest7.designer.cs">
-      <DependentUpon>20190322050216_LocationTest7.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322050739_LocationTest8.cs" />
-    <Compile Include="Migrations\20190322050739_LocationTest8.designer.cs">
-      <DependentUpon>20190322050739_LocationTest8.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322051026_LocationTest9.cs" />
-    <Compile Include="Migrations\20190322051026_LocationTest9.designer.cs">
-      <DependentUpon>20190322051026_LocationTest9.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322051722_LocationTest91.cs" />
-    <Compile Include="Migrations\20190322051722_LocationTest91.designer.cs">
-      <DependentUpon>20190322051722_LocationTest91.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190322052208_LocationTest99.cs" />
-    <Compile Include="Migrations\20190322052208_LocationTest99.designer.cs">
-      <DependentUpon>20190322052208_LocationTest99.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190329103432_tabeller.cs" />
-    <Compile Include="Migrations\20190329103432_tabeller.designer.cs">
-      <DependentUpon>20190329103432_tabeller.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190409124046_nulltest.cs" />
-    <Compile Include="Migrations\20190409124046_nulltest.designer.cs">
-      <DependentUpon>20190409124046_nulltest.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190409190255_TestID.cs" />
-    <Compile Include="Migrations\20190409190255_TestID.designer.cs">
-      <DependentUpon>20190409190255_TestID.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20190424175557_asdasdasd.cs" />
-    <Compile Include="Migrations\20190424175557_asdasdasd.designer.cs">
-      <DependentUpon>20190424175557_asdasdasd.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Database\AppDbContext.cs" />
     <Compile Include="GeocacheDialog.xaml.cs">
       <DependentUpon>GeocacheDialog.xaml</DependentUpon>
@@ -404,7 +295,9 @@
   <ItemGroup>
     <Resource Include="Geocaches.txt" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="GeocashesCSLocations.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

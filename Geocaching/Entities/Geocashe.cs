@@ -20,7 +20,7 @@ namespace Geocaching.Models
         [MaxLength(255)]
         [Required]
         public string Message { get; set; }
-        public int PersonId { get; set; }
+        public int? PersonID { get; set; }
         public Person Person { get; set; }
     }
 }

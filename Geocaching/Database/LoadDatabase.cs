@@ -6,11 +6,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Geocaching.Database
 {
     public  static class LoadDatabase
     {
+
         private static List<Person> _persons;
         private static List<Geocashe> _geocashes;
         private static List<FoundGeocache> _foundGeocashes;
@@ -26,6 +28,7 @@ namespace Geocaching.Database
 
         public static async Task FromFlatFile(string path)
         {
+
             var emptyDatabase = EmptyDatabaseAsync();
 
             _persons.Clear();

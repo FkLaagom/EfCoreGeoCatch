@@ -18,6 +18,8 @@ using Geocaching.Models;
 using Microsoft.EntityFrameworkCore;
 using Geocaching.Database;
 using System.Threading;
+using System.Globalization;
+using System.Configuration;
 
 namespace Geocaching
 {
@@ -26,9 +28,8 @@ namespace Geocaching
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Contains the ID string needed to use the Bing map.
-        // Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
-        private readonly string applicationId = "AlkAgPVerBBqzh_R2hMjn3aFu4ymqxo2PObuhkEwN-hZDA5VcjGgsTa8aVK8gnSV";
+        private readonly string applicationId = ConfigurationManager.ConnectionStrings["BingMaps"].ConnectionString; 
+            
         private MapLayer layer;
         private Person SelectedPerson;
 
@@ -45,8 +46,6 @@ namespace Geocaching
 
         private async void Start()
         {
-            System.Globalization.CultureInfo.CurrentCulture = System.Globalization.CultureInfo.InvariantCulture;
-
             if (applicationId == null)
             {
                 MessageBox.Show("Please set the applicationId variable before running this program.");
@@ -111,20 +110,20 @@ namespace Geocaching
 
         private async void SelectGeoPin(Pushpin pin, Geocashe geo)
         {
-            if(SelectedPerson == null)
+            if (SelectedPerson == null)
                 return;
             if (SelectedPerson.Geocashes.Contains(geo))
                 return;
-            
+
             if (SelectedPerson.FoundGeocaches.Any(x => x.GeocasheID == geo.ID))
             {
-               FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
-               SelectedPerson.FoundGeocaches.Remove(found);
-               pin.Background = new SolidColorBrush(Colors.Red);
+                FoundGeocache found = SelectedPerson.FoundGeocaches.FirstOrDefault(f => f.Geocashe.ID == geo.ID);
+                SelectedPerson.FoundGeocaches.Remove(found);
+                pin.Background = new SolidColorBrush(Colors.Red);
                 var crud = new Crud<FoundGeocache>();
                 await crud.DeleteAsync(found);
             }
-            
+
             else
             {
                 pin.Background = new SolidColorBrush(Colors.Green);
@@ -154,12 +153,13 @@ namespace Geocaching
                 Location = latestClickLocation,
                 Content = dialog.GeocacheContents,
                 Message = dialog.GeocacheMessage,
-                PersonId = SelectedPerson.ID
+                PersonID = SelectedPerson.ID
             };
-            
+
             var x = new Crud<Geocashe>();
             await x.CreateAsync(geocache);
             SelectedPerson.Geocashes.Add(geocache);
+
 
             var pin = AddPin(latestClickLocation, PinGeoInfo(SelectedPerson, geocache), Colors.Black, geocache);
 
@@ -191,7 +191,9 @@ namespace Geocaching
                 Country = dialog.AddressCountry,
                 City = dialog.AddressCity,
                 StreetName = dialog.AddressStreetName,
-                StreetNumber = dialog.AddressStreetNumber
+                StreetNumber = dialog.AddressStreetNumber,
+                Geocashes = new List<Geocashe>(),
+                FoundGeocaches = new List<FoundGeocache>()
             };
 
             var pin = AddPersonPin(person);
@@ -285,9 +287,9 @@ namespace Geocaching
 
         private async Task LoadMapDataFromDatabase()
         {
-           layer.Children.Clear();
-           var crud = new Crud<Person>();
-           var persons = await crud.GetListAsync(true);
+            layer.Children.Clear();
+            var crud = new Crud<Person>();
+            var persons = await crud.GetListAsync(true);
 
             // Load data from database and populate map here.
             persons.ForEach(person =>
@@ -310,7 +312,7 @@ namespace Geocaching
                     };
                 });
             });
-            
+
         }
 
         private static string PinGeoInfo(Person person, Geocashe geocashe)
