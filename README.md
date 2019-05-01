@@ -2,7 +2,7 @@
 Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs asynchronous.
  
 ## Installation 
-Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) & SQL-Connection string inside App.Congig.
+Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) & SQL-Connection string inside [App.Congig.](Geocaching/App.config)
 
 Package Manager Console:
 ```sh
