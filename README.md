@@ -1,12 +1,12 @@
 # GeoCatch
 Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs asynchronous.
 ### To run the project please specify bing-maps API key & SQL-Connection string inside App.Congig
-Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
+### Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
 
-#Layout
+# Layout
 ![Alt Text](https://github.com/FkLaagom/GeoCatch/blob/master/MD/Example.png)
 
-#Syfte
+# Syfte
 >Syftet med detta projektarbete är att ni ska bli vana vid att använda Entity Framework Core genom att använda det i en okänd miljö. 
 >Istället för att använda det tillsammans med konsolen eller ASP.NET kommer ni att >utveckla en GUI-app med WPF
 >
