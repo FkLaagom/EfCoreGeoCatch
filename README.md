@@ -1,7 +1,14 @@
 # GeoCatch
 Small school project for practicing EF-Core Code First Aproach. All SQL CRUD operations runs asynchronous.
-### To run the project please specify bing-maps API key & SQL-Connection string inside App.Congig
-### Instructions here: https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key
+ 
+## Installation 
+Specify [bing-maps API key](https://docs.microsoft.com/en-us/bingmaps/getting-started/bing-maps-dev-center-help/getting-a-bing-maps-key) & SQL-Connection string inside App.Congig.
+
+Add migration & Update Database.
+```sh
+npm> Add-Migration Initial
+npm> Update-Database
+```
 
 # Layout
 ![Alt Text](https://github.com/FkLaagom/GeoCatch/blob/master/MD/Example.png)
